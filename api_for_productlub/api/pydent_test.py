@@ -2,12 +2,12 @@ import requests
 
 from pydantic import BaseModel, ValidationError
 
-url = 'https://basket-05.wb.ru/vol735/part73512/73512949/info/ru/card.json'
-response = requests.get(url)
-obj = response.json()
-#print(obj)
 
-#obj = str(response.json()).replace("\'", "\"")
+def pydent(url):
+
+    response = requests.get(url)
+    obj = response.json()
+    return obj
 
 
 class Card(BaseModel):
@@ -16,6 +16,10 @@ class Card(BaseModel):
     article: int
 
 
-card = Card(id=6, brand=obj['selling']['brand_name'], article=obj['nm_id'])
+#url = input()
+
+card = Card(id=6, brand=pydent('https://basket-05.wb.ru/vol735/part73512/73512949/info/ru/card.json')['selling']['brand_name'],
+            article=pydent('https://basket-05.wb.ru/vol735/part73512/73512949/info/ru/card.json'
+)['nm_id'])
 card = card.dict()
-#print(card)
+print(card)
