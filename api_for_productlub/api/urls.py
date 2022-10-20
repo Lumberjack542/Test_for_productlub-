@@ -4,7 +4,10 @@ from rest_framework import routers
 
 
 urlpatterns = [
-    path('', FileArticleApiview.as_view()),  #add article and file
+    path('', BrandArticleTitleApiView.as_view()),
+    path('add', FileArticleApiview.as_view()),  #add article and file
     path('article', article_obj),
+
+
 
 ]

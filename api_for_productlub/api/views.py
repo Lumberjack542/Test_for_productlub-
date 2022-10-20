@@ -27,9 +27,7 @@ def article_obj(request):
         url = "https://basket-05.wb.ru/vol735/part73512/73512949/info/ru/card.json"
         response = requests.get(url)
         data = response.json()
-        j = article[0]
-        n = dict(article[0])['article']
-        k = data['nm_id']
+
         if dict(article[0])['article'] == str(data['nm_id']):
             if not BrandArticleModel.objects.filter(brand=data['selling']['brand_name'], article=data['nm_id'],
                                                     title=data['imt_name']).exists():
@@ -39,31 +37,14 @@ def article_obj(request):
         return Response(serializer.data, )
 
 
-# def get_obj():
-#     url = "https://basket-05.wb.ru/vol735/part73512/73512949/info/ru/card.json"
-#     response = requests.get(url)
-#     data = response.json()
-#     #if article_obj() == data['nm_id']:
-#     if not BrandArticleModel.objects.filter(brand=data['selling']['brand_name'], article=data['nm_id'], title=data['imt_name']).exists():
-#         BrandArticleModel.objects.create(brand=data['selling']['brand_name'], article=data['nm_id'], title=data['imt_name'])
-#         print('save')
-
-
-# @api_view()
-# def hello_world(request):
-#     get_obj()
-#     return Response({"message": "Hello, world!"})
-
-
-
-# def some_view():
-#     data = list(BrandArticleModel.objects.values('article'))
-#     print(data)
-#     return JsonResponse(data, safe=False)
+class BrandArticleTitleApiView(generics.ListAPIView):
+    queryset = BrandArticleModel.objects.all()
+    serializer_class = BrandArticleSerializer
 
 
 def clear_data():
-  BrandArticleModel.objects.all().delete()
+    BrandArticleModel.objects.all().delete()
+    ArticleFile.objects.all().delete()
 
 
 
