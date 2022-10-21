@@ -17,6 +17,13 @@ class FileArticleApiview(generics.ListCreateAPIView):
     serializer_class = FileArticleSerializer
 
 
+def get_data_from_wb():
+    url = "https://basket-05.wb.ru/vol735/part73512/73512949/info/ru/card.json"
+    response = requests.get(url)
+    data = response.json()
+    return data
+
+
 @api_view(['GET'])
 def article_obj(request):
     if request.method == 'GET':
@@ -25,15 +32,13 @@ def article_obj(request):
         article = JsonResponse(serializer.data, safe=False)
         article = article.content
         article = json.loads(article.decode())
-        url = "https://basket-05.wb.ru/vol735/part73512/73512949/info/ru/card.json"
-        response = requests.get(url)
-        data = response.json()
+
         for i in range(len(article)):
-            if dict(article[i])['article'] == str(data['nm_id']):
-                if not BrandArticleModel.objects.filter(brand=data['selling']['brand_name'], article=data['nm_id'],
-                                                        title=data['imt_name']).exists():
-                    BrandArticleModel.objects.create(brand=data['selling']['brand_name'], article=data['nm_id'],
-                                                     title=data['imt_name'])
+            if dict(article[i])['article'] == str(get_data_from_wb()['nm_id']):
+                if not BrandArticleModel.objects.filter(brand=get_data_from_wb()['selling']['brand_name'], article=get_data_from_wb()['nm_id'],
+                                                        title=get_data_from_wb()['imt_name']).exists():
+                    BrandArticleModel.objects.create(brand=get_data_from_wb()['selling']['brand_name'], article=get_data_from_wb()['nm_id'],
+                                                     title=get_data_from_wb()['imt_name'])
                     print('save')
         return Response(serializer.data, )
 
