@@ -14,4 +14,5 @@ class BrandArticleModel(models.Model):
 
 class ArticleFile(models.Model):
     article = models.CharField(max_length=250, null=True)
-    file = models.FileField(upload_to='documents/%Y/%m/%d/', null=True,blank=True)
+    file = models.FileField(upload_to='documents/%Y/%m/%d/', null=True, blank=True)
+

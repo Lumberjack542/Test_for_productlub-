@@ -1,3 +1,4 @@
+import pandas as pd
 from rest_framework import generics, viewsets, mixins
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
@@ -27,13 +28,13 @@ def article_obj(request):
         url = "https://basket-05.wb.ru/vol735/part73512/73512949/info/ru/card.json"
         response = requests.get(url)
         data = response.json()
-
-        if dict(article[0])['article'] == str(data['nm_id']):
-            if not BrandArticleModel.objects.filter(brand=data['selling']['brand_name'], article=data['nm_id'],
-                                                    title=data['imt_name']).exists():
-                BrandArticleModel.objects.create(brand=data['selling']['brand_name'], article=data['nm_id'],
-                                                 title=data['imt_name'])
-                print('save')
+        for i in range(len(article)):
+            if dict(article[i])['article'] == str(data['nm_id']):
+                if not BrandArticleModel.objects.filter(brand=data['selling']['brand_name'], article=data['nm_id'],
+                                                        title=data['imt_name']).exists():
+                    BrandArticleModel.objects.create(brand=data['selling']['brand_name'], article=data['nm_id'],
+                                                     title=data['imt_name'])
+                    print('save')
         return Response(serializer.data, )
 
 
